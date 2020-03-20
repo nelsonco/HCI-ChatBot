@@ -128,7 +128,13 @@ class OxyCSBot(ChatBot):
         Returns:
             str: The message to send to the user.
         """
-        return self.go_to_state
+
+        """ must parse message and save name to self.name?"""
+
+        response = '\n'.join([
+            
+
+        ])
 
 
 
