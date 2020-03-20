@@ -112,8 +112,25 @@ class OxyCSBot(ChatBot):
 
     # "specific_faculty" state functions
 
-    def on_enter_introduction(self, message, tags):
+    def on_enter_introduction(self):
         """ Send a message when entering the introduction state. """
+        response = '\n'.join([
+            "Hi I am, I am here to help you work on your interviewing skills.",
+            "What is your name?"
+        ])
+        return response, self.go_to_state('user_name')
+
+    def on_enter_user_name(self, message, tags):
+        """ Define name of user
+        Parameters:
+            message (str): The incoming message.
+            tags (Mapping[str, int]): A count of the tags that apply to the message.
+        Returns:
+            str: The message to send to the user.
+        """
+        return self.go_to_state
+
+
 
 
     def on_enter_specific_faculty(self):
