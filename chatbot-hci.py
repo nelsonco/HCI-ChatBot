@@ -3,7 +3,7 @@
 from chatbot import ChatBot
 
 
-class OxyCSBot(ChatBot):
+class  OxyCSBot(ChatBot):
     """A simple chatbot that directs students to office hours of CS professors."""
 
     STATES = [
@@ -212,7 +212,7 @@ class OxyCSBot(ChatBot):
         ])
         return response, self.go_to_state('strengths_question')
 
-    
+
 
 
 
