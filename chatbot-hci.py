@@ -11,6 +11,10 @@ class OxyCSBot(ChatBot):
         'specific_faculty',
         'unknown_faculty',
         'unrecognized_faculty',
+        'introduction',
+        'save_name',
+        'indentify_company',
+        'save_company'
     ]
 
     TAGS = {
@@ -110,17 +114,15 @@ class OxyCSBot(ChatBot):
         else:
             return self.finish('confused')
 
-    # "specific_faculty" state functions
-
     def on_enter_introduction(self):
-        """ Send a message when entering the introduction state. """
+        # Send a message when entering the introduction state.
         response = '\n'.join([
             "Hi I am, I am here to help you work on your interviewing skills.",
             "What is your name?"
         ])
-        return response, self.go_to_state('user_name')
+        return response, self.go_to_state('save_name')
 
-    def on_enter_user_name(self, message, tags):
+    def on_enter_save_name(self, message, tags):
         """ Define name of user
         Parameters:
             message (str): The incoming message.
@@ -132,12 +134,51 @@ class OxyCSBot(ChatBot):
         """ must parse message and save name to self.name?"""
 
         response = '\n'.join([
-            
+            f"Hi, {self.name}, I am looking forward to helping you work on your interview skills.",
+        ]),
 
+        return response, self.go_to_state('indentify_company')
+
+    def on_enter_identify_company(self, message, tags):
+        response = '\n'.join([
+            "Is there a specific company you are planning to apply to, and if so, what is it?"
         ])
+        return response, self.go_to_state('save_company')
 
+    def on_enter_save_company(self,message,tags):
+        if 'yes' in tags:
+            # assign self.company to inputted company name
+            response = '\n'.join([
+                "Great! What position are you applying for?"
+            ])
+            return self.go_to_state('position')
+        elif 'no' in tags:
+            response = '\n'.join([
+                "No problem! How about a specific position?"
+            ])
+            return self.go_to_state('position')
+        else:
+            response = '\n'.join([
+                "Okay."
+            ])
+            return self.go_to_state('position')
 
+    def on_enter_position(self, message, tags):
+        if 'yes' in tags:
+            response = '\n'.join([
+                "Wow, that sounds like an amazing opportunity!"
+            ])
+        elif 'no' in tags:
+            response = '\n'.join([
+                "Don't worry that's fine! I'll still prepare you for whatever comes your way"
+            ])
+        else:
+            response = '\n'.join([
+                "Okaym thanks for letting me know."
+            ])
+    return response, self.go_to_state('start_interview')
 
+    def on_enter_start_interview(self):
 
     def on_enter_specific_faculty(self):
         """Send a message when entering the "specific_faculty" state."""
@@ -146,6 +187,7 @@ class OxyCSBot(ChatBot):
             'Do you know where their office is?',
         ])
         return response
+
 
     def respond_from_specific_faculty(self, message, tags):
         """Decide what state to go to from the "specific_faculty" state.
