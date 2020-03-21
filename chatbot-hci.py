@@ -176,9 +176,46 @@ class OxyCSBot(ChatBot):
             response = '\n'.join([
                 "Okaym thanks for letting me know."
             ])
-    return response, self.go_to_state('start_interview')
+        return response, self.go_to_state('transition_interview')
+
+    def on_enter_transition_interview(self):
+        response = '\n'.join([
+            "Would you like to start a casual mock interview?",
+            "It would only take around five minutes.",
+            "I’ll ask you some of the most common interview questions",
+            "and give you a few pointers in parenthesis along the way."
+        ])
+        return response, self.go_to_state('interview_decision')
+
+    def on_enter_interview_decision(self, message, tags):
+        if 'yes' in tags:
+            response = '\n'.join([
+                "Great, let’s begin! Remember, you should treat this as if it was a “real” interview,",
+                " so be purposeful with your words. I’ll be right back, I’m gonna change into my suit and tie!"
+                ])
+            return response, self.go_to_state('start_interview')
+        elif 'no' in tags:
+            response = '\n'.join([
+                "Unfortunately, the best way for me to give you feedback would be through conversation."
+            ])
+            return response, self.finish('generic')
+        else:
+            response = '\n'.join([
+                "Sorry, could you please clarify."
+            ])
+            return response, self.go_to_state('interview_decision')
 
     def on_enter_start_interview(self):
+        response = '\n'.join([
+            f"Good morning {self.name}. I’m Siri , pleased to meet you.",
+            " I’ll be interviewing you today."
+        ])
+        return response, self.go_to_state('strengths_question')
+
+    
+
+
+
 
     def on_enter_specific_faculty(self):
         """Send a message when entering the "specific_faculty" state."""
@@ -258,6 +295,8 @@ class OxyCSBot(ChatBot):
     def finish_generic(self):
         """Send a message and go to the default state."""
         return "Well, it was nice talking to you! I hope you were able to gain something from this experience."
+
+    =
 
 if __name__ == '__main__':
     OxyCSBot().chat()
